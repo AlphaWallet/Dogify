@@ -1,9 +1,12 @@
 package cn.seabornlee.dogify.di
 
 import cn.seabornlee.dogify.api.BreedsApi
+import cn.seabornlee.dogify.database.createDriver
+import cn.seabornlee.dogify.db.DogifyDatabase
 import cn.seabornlee.dogify.model.FetchBreedsUseCase
 import cn.seabornlee.dogify.model.GetBreedsUseCase
 import cn.seabornlee.dogify.model.ToggleFavouriteStateUseCase
+import cn.seabornlee.dogify.repository.BreedsLocalSource
 import cn.seabornlee.dogify.repository.BreedsRemoteSource
 import cn.seabornlee.dogify.repository.BreedsRepository
 import cn.seabornlee.dogify.util.getDispatcherProvider
@@ -13,6 +16,7 @@ import org.koin.dsl.module
 
 private val utilityModule = module {
     factory { getDispatcherProvider() }
+    single { DogifyDatabase(createDriver("dogify.db")) }
 }
 
 private val apiModule = module {
@@ -20,8 +24,9 @@ private val apiModule = module {
 }
 
 private val repositoryModule = module {
-    single { BreedsRepository(get()) }
+    single { BreedsRepository(get(), get()) }
     factory { BreedsRemoteSource(get(), get()) }
+    factory { BreedsLocalSource(get(), get()) }
 }
 
 private val usecaseModule = module {
