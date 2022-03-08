@@ -1,5 +1,10 @@
 package cn.seabornlee.dogify.model
 
-class GetBreedsUseCase {
-    suspend fun invoke(): List<Breed> = listOf(Breed("Test get", ""))
+import cn.seabornlee.dogify.repository.BreedsRepository
+import org.koin.core.component.KoinComponent
+import org.koin.core.component.inject
+
+class GetBreedsUseCase: KoinComponent {
+    private val breedsRepository: BreedsRepository by inject()
+    suspend fun invoke(): List<Breed> = breedsRepository.get()
 }

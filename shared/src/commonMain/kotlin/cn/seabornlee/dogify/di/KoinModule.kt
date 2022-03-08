@@ -1,11 +1,28 @@
 package cn.seabornlee.dogify.di
 
+import cn.seabornlee.dogify.api.BreedsApi
 import cn.seabornlee.dogify.model.FetchBreedsUseCase
 import cn.seabornlee.dogify.model.GetBreedsUseCase
 import cn.seabornlee.dogify.model.ToggleFavouriteStateUseCase
+import cn.seabornlee.dogify.repository.BreedsRemoteSource
+import cn.seabornlee.dogify.repository.BreedsRepository
+import cn.seabornlee.dogify.util.getDispatcherProvider
 import org.koin.core.context.startKoin
 import org.koin.dsl.KoinAppDeclaration
 import org.koin.dsl.module
+
+private val utilityModule = module {
+    factory { getDispatcherProvider() }
+}
+
+private val apiModule = module {
+    factory { BreedsApi() }
+}
+
+private val repositoryModule = module {
+    single { BreedsRepository(get()) }
+    factory { BreedsRemoteSource(get(), get()) }
+}
 
 private val usecaseModule = module {
     factory { GetBreedsUseCase() }
@@ -13,7 +30,7 @@ private val usecaseModule = module {
     factory { ToggleFavouriteStateUseCase() }
 }
 
-private val sharedModules = listOf(usecaseModule)
+private val sharedModules = listOf(usecaseModule, repositoryModule, apiModule, utilityModule)
 fun initKoin(appDeclaration: KoinAppDeclaration = {}) = startKoin {
     appDeclaration()
     modules(sharedModules)
