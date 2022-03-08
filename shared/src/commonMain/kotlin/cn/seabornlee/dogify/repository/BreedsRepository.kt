@@ -20,7 +20,7 @@ class BreedsRepository internal constructor(
             }
         }
 
-    private suspend fun fetch() = supervisorScope {
+    suspend fun fetch() = supervisorScope {
         remoteSource.getBreeds().map {
             async {
                 Breed(
