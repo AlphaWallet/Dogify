@@ -4,11 +4,12 @@ import cn.seabornlee.dogify.model.Breed
 import kotlinx.coroutines.async
 import kotlinx.coroutines.awaitAll
 import kotlinx.coroutines.supervisorScope
+import org.koin.core.component.KoinComponent
+import org.koin.core.component.get
 
-class BreedsRepository internal constructor(
-    private val remoteSource: BreedsRemoteSource,
-    private val localSource: BreedsLocalSource
-) {
+class BreedsRepository : KoinComponent {
+    private val remoteSource: BreedsRemoteSource = get(null)
+    private val localSource: BreedsLocalSource = get(null)
     val breeds = localSource.breeds
 
     internal suspend fun get() =

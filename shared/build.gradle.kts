@@ -1,8 +1,9 @@
 plugins {
     kotlin("multiplatform")
-    id("com.squareup.sqldelight")
     id("com.android.library")
-    kotlin("plugin.serialization") version "1.5.10"
+    kotlin("plugin.serialization") version "1.5.21"
+    id("com.squareup.sqldelight")
+    id("com.rickclephas.kmp.nativecoroutines") version "0.11.3"
 }
 
 kotlin {
